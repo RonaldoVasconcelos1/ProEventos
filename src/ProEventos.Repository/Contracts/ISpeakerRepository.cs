@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using ProEventos.Domain;
 
-namespace src.ProEventos.Repository.Contracts
+namespace ProEventos.Repository.Contracts
 {
     public interface ISpeakerRepository
     {
