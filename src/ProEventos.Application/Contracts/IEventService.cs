@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using ProEventos.Domain;
 
-namespace src.ProEventos.Application.Contracts
+namespace ProEventos.Application.Contracts
 {
     public interface IEventService
     {

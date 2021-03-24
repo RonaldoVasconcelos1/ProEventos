@@ -4,7 +4,7 @@ using ProEventos.Repository.Data;
 
 namespace ProEventos.Repository.Repository
 {
-    public class GenericRepository : IGenereicRepository
+    public class GenericRepository : IGenericRepository
     {
         private readonly ProEventosRepository _context;
         public GenericRepository(ProEventosRepository context)

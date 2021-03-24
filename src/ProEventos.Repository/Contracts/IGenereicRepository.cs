@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace ProEventos.Repository.Contracts
 {
-    public interface IGenereicRepository
+    public interface IGenericRepository
     {
         void Post<T>(T entity) where T : class;
         void Update<T>(T entity) where T : class;
