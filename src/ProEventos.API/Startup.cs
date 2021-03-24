@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProEventos.Application.Contracts;
+using ProEventos.Application.Services;
+using ProEventos.Repository.Contracts;
+using ProEventos.Repository.Data;
+using ProEventos.Repository.Repository;
 
 namespace ProEventos.API
 {
@@ -26,8 +25,18 @@ namespace ProEventos.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            services.AddCors();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IGenericRepository, GenericRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddControllers()
+                 .AddNewtonsoftJson(
+                    x => x.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+            services.AddDbContext<ProEventosRepository>(
+                options => options.UseNpgsql(Configuration.GetConnectionString("Default"))
+            );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEventos.API", Version = "v1" });
