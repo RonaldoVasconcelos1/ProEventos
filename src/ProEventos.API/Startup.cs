@@ -35,8 +35,8 @@ namespace ProEventos.API
                     Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
             services.AddDbContext<ProEventosRepository>(
-                options => options.UseNpgsql(Configuration.GetConnectionString("Default"))
-            );
+                 options => options.UseNpgsql(Configuration.GetConnectionString("Default"))
+             );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEventos.API", Version = "v1" });
