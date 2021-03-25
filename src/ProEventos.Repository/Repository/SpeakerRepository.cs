@@ -1,7 +1,7 @@
 using System.Linq;
 using System;
 using System.Threading.Tasks;
-using ProEventos.Domain;
+using ProEventos.Domain.Entities.Events;
 using ProEventos.Repository.Contracts;
 using ProEventos.Repository.Data;
 using Microsoft.EntityFrameworkCore;

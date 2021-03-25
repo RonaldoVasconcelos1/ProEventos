@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProEventos.Domain;
+using ProEventos.Domain.Entities.Events;
 
 namespace ProEventos.Repository.Data
 {
