@@ -14,7 +14,6 @@ namespace ProEventos.Application.Services
         {
             _eventRepo = eventRepo;
             _genericRepo = genericRepo;
-
         }
         public async Task<Event> Add(Event model)
         {
@@ -51,7 +50,6 @@ namespace ProEventos.Application.Services
                 throw new Exception(ex.Message);
             }
         }
-
         public async Task<bool> Remove(Guid id)
         {
             var eventRemoved = await _eventRepo.GetAllEventById(id, false);
@@ -73,7 +71,6 @@ namespace ProEventos.Application.Services
             if (eventsTheme == null) return null;
             return eventsTheme;
         }
-
         public async Task<Event> GetEventById(Guid id, bool includeSpeaker)
         {
             var eventId = await _eventRepo.GetAllEventById(id, includeSpeaker);

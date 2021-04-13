@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProEventos.Repository.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Update2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,6 +39,19 @@ namespace ProEventos.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Speakers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Password = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,6 +128,28 @@ namespace ProEventos.Repository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Peoples",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    LasName = table.Column<string>(type: "text", nullable: true),
+                    Cpf = table.Column<string>(type: "text", nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Peoples", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Peoples_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EventSpeaker_SpeakerId",
                 table: "EventSpeaker",
@@ -124,6 +159,11 @@ namespace ProEventos.Repository.Migrations
                 name: "IX_Lots_EventId",
                 table: "Lots",
                 column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Peoples_UserId",
+                table: "Peoples",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SocialMedia_EventId",
@@ -145,7 +185,13 @@ namespace ProEventos.Repository.Migrations
                 name: "Lots");
 
             migrationBuilder.DropTable(
+                name: "Peoples");
+
+            migrationBuilder.DropTable(
                 name: "SocialMedia");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Events");

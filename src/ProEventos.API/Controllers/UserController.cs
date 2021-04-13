@@ -2,20 +2,20 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProEventos.Domain.Entities.Users;
 using ProEventos.Application.Contracts;
-using ProEventos.Domain.Entities.Events;
 
 namespace ProEventos.API.Controllers
 {
 
     [ApiController]
-    [Route("v1/[controller]")]
-    public class EventController : ControllerBase
+    [Route("v1/Users")]
+    public class UserController : ControllerBase
     {
-        private readonly IEventService _eventService;
-        public EventController(IEventService eventService)
+        private readonly IUserService _userService;
+        public UserController(IUserService userService)
         {
-            _eventService = eventService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -23,9 +23,9 @@ namespace ProEventos.API.Controllers
         {
             try
             {
-                var events = await _eventService.GetAllEventsAsync(false);
-                if (events == null) return NotFound("No Events Found");
-                return Ok(events);
+                var users = await _userService.GetAllUsersAsync();
+                if (users == null) return NotFound("No User Found");
+                return Ok(users);
             }
             catch (Exception ex)
             {
@@ -34,14 +34,14 @@ namespace ProEventos.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetEventById(Guid id)
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetByUserId(Guid id)
         {
             try
             {
-                var eventId = await _eventService.GetEventById(id, false);
-                if (eventId == null) return NotFound("Event Not Found");
-                return Ok(eventId);
+                var userId = await _userService.GetUserById(id);
+                if (userId == null) return NotFound("User Not Found");
+                return Ok(userId);
 
             }
             catch (System.Exception ex)
@@ -51,14 +51,14 @@ namespace ProEventos.API.Controllers
             }
         }
 
-        [HttpGet("{theme}/theme")]
-        public async Task<IActionResult> GetByTheme(string theme)
+        [HttpGet("{email}")]
+        public async Task<IActionResult> GetByEmail(string email)
         {
             try
             {
-                var eventsTheme = await _eventService.GetAllEventThemeAsync(theme, false);
-                if (eventsTheme == null) return NotFound("Event Not Found");
-                return Ok(eventsTheme);
+                var user = await _userService.GetAllUserEmailAsync(email);
+                if (user == null) return NotFound("Event Not Found");
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -69,13 +69,13 @@ namespace ProEventos.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Event model)
+        public async Task<IActionResult> Post(User model)
         {
             try
             {
-                var eventModel = await _eventService.Add(model);
-                if (eventModel == null) return BadRequest("Error Signing Up ");
-                return Ok(eventModel);
+                var userModel = await _userService.Add(model);
+                if (userModel == null) return BadRequest("Error Signing Up ");
+                return Ok(userModel);
             }
             catch (Exception ex)
             {
@@ -86,13 +86,13 @@ namespace ProEventos.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, Event model)
+        public async Task<IActionResult> Put(Guid id, User model)
         {
             try
             {
-                var eventPut = await _eventService.Update(model, id);
-                if (eventPut == null) return NotFound("Event Not Found");
-                return Ok(eventPut);
+                var user = await _userService.Update(model, id);
+                if (user == null) return NotFound("Event Not Found");
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -106,8 +106,8 @@ namespace ProEventos.API.Controllers
         {
             try
             {
-                var eventRemoved = await _eventService.Remove(id);
-                return (eventRemoved ? Ok()
+                var user = await _userService.Remove(id);
+                return (user ? Ok()
                     : BadRequest("Error while deleting"));
             }
             catch (Exception ex)

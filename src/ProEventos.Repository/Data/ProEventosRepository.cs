@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProEventos.Domain.Entities.Events;
+using ProEventos.Domain.Entities.Users;
+using ProEventos.Domain.Entities.Peoples;
 
 namespace ProEventos.Repository.Data
 {
@@ -12,6 +14,8 @@ namespace ProEventos.Repository.Data
         public DbSet<Speaker> Speakers { get; set; }
         public DbSet<EventSpeaker> EventSpeaker { get; set; }
         public DbSet<SocialNetWorker> SocialMedia { get; set; }
+        public DbSet<People> Peoples { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +31,7 @@ namespace ProEventos.Repository.Data
                 .HasMany(es => es.SocialMedia)
                 .WithOne(es => es.Speaker)
                 .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

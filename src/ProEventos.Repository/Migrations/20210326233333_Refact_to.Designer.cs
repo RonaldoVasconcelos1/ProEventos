@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProEventos.Repository.Data;
@@ -9,9 +10,10 @@ using ProEventos.Repository.Data;
 namespace ProEventos.Repository.Migrations
 {
     [DbContext(typeof(ProEventosRepository))]
-    partial class ProEventosRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20210326233333_Refact_to")]
+    partial class Refact_to
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,12 +170,7 @@ namespace ProEventos.Repository.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("UsersId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UsersId");
 
                     b.ToTable("Peoples");
                 });
@@ -190,7 +187,12 @@ namespace ProEventos.Repository.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("PeopleId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PeopleId");
 
                     b.ToTable("Users");
                 });
@@ -243,13 +245,11 @@ namespace ProEventos.Repository.Migrations
                     b.Navigation("Speaker");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.Entities.Peoples.People", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Users.User", b =>
                 {
-                    b.HasOne("ProEventos.Domain.Entities.Users.User", "Users")
-                        .WithMany()
-                        .HasForeignKey("UsersId");
-
-                    b.Navigation("Users");
+                    b.HasOne("ProEventos.Domain.Entities.Peoples.People", null)
+                        .WithMany("Users")
+                        .HasForeignKey("PeopleId");
                 });
 
             modelBuilder.Entity("ProEventos.Domain.Entities.Events.Event", b =>
@@ -266,6 +266,11 @@ namespace ProEventos.Repository.Migrations
                     b.Navigation("EventSpeakers");
 
                     b.Navigation("SocialMedia");
+                });
+
+            modelBuilder.Entity("ProEventos.Domain.Entities.Peoples.People", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

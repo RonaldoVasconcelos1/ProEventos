@@ -25,10 +25,16 @@ namespace ProEventos.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IGenericRepository, GenericRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IGenericRepository, GenericRepository>();
+            services.AddScoped<IPeopleRepository, PeopleRepository>();
+            services.AddScoped<IPeopleService, PeopleService>();
+            services.AddScoped<IGenericRepository, GenericRepository>();
+            services.AddCors();
             services.AddControllers()
                  .AddNewtonsoftJson(
                     x => x.SerializerSettings.ReferenceLoopHandling =

@@ -16,8 +16,6 @@ namespace ProEventos.Repository.Repository
         {
             _context = context;
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-
         }
         public async Task<Event[]> GetAllEventsAsync(bool includeSpeaker)
         {

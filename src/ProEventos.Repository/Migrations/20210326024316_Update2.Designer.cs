@@ -10,8 +10,8 @@ using ProEventos.Repository.Data;
 namespace ProEventos.Repository.Migrations
 {
     [DbContext(typeof(ProEventosRepository))]
-    [Migration("20210325012107_Initial")]
-    partial class Initial
+    [Migration("20210326024316_Update2")]
+    partial class Update2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace ProEventos.Repository.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("ProEventos.Domain.Event", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.Event", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace ProEventos.Repository.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.EventSpeaker", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.EventSpeaker", b =>
                 {
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
@@ -68,7 +68,7 @@ namespace ProEventos.Repository.Migrations
                     b.ToTable("EventSpeaker");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.Lot", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.Lot", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,7 +99,7 @@ namespace ProEventos.Repository.Migrations
                     b.ToTable("Lots");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.SocialNetWorker", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.SocialNetWorker", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,7 +126,7 @@ namespace ProEventos.Repository.Migrations
                     b.ToTable("SocialMedia");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.Speaker", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.Speaker", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,15 +152,60 @@ namespace ProEventos.Repository.Migrations
                     b.ToTable("Speakers");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.EventSpeaker", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Users.User", b =>
                 {
-                    b.HasOne("ProEventos.Domain.Event", "Event")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("src.ProEventos.Domain.Entities.Peoples.People", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Cpf")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LasName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Peoples");
+                });
+
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.EventSpeaker", b =>
+                {
+                    b.HasOne("ProEventos.Domain.Entities.Events.Event", "Event")
                         .WithMany("EventSpeakers")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProEventos.Domain.Speaker", "Speaker")
+                    b.HasOne("ProEventos.Domain.Entities.Events.Speaker", "Speaker")
                         .WithMany("EventSpeakers")
                         .HasForeignKey("SpeakerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -171,9 +216,9 @@ namespace ProEventos.Repository.Migrations
                     b.Navigation("Speaker");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.Lot", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.Lot", b =>
                 {
-                    b.HasOne("ProEventos.Domain.Event", "Event")
+                    b.HasOne("ProEventos.Domain.Entities.Events.Event", "Event")
                         .WithMany("Lots")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -182,14 +227,14 @@ namespace ProEventos.Repository.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.SocialNetWorker", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.SocialNetWorker", b =>
                 {
-                    b.HasOne("ProEventos.Domain.Event", "Event")
+                    b.HasOne("ProEventos.Domain.Entities.Events.Event", "Event")
                         .WithMany("SocialMedia")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ProEventos.Domain.Speaker", "Speaker")
+                    b.HasOne("ProEventos.Domain.Entities.Events.Speaker", "Speaker")
                         .WithMany("SocialMedia")
                         .HasForeignKey("SpeakerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -200,7 +245,16 @@ namespace ProEventos.Repository.Migrations
                     b.Navigation("Speaker");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.Event", b =>
+            modelBuilder.Entity("src.ProEventos.Domain.Entities.Peoples.People", b =>
+                {
+                    b.HasOne("ProEventos.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.Event", b =>
                 {
                     b.Navigation("EventSpeakers");
 
@@ -209,7 +263,7 @@ namespace ProEventos.Repository.Migrations
                     b.Navigation("SocialMedia");
                 });
 
-            modelBuilder.Entity("ProEventos.Domain.Speaker", b =>
+            modelBuilder.Entity("ProEventos.Domain.Entities.Events.Speaker", b =>
                 {
                     b.Navigation("EventSpeakers");
 
